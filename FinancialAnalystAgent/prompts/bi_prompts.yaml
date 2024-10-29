@@ -1,0 +1,19 @@
+zero_shot:
+  system_prompt: "You are an Business Intelligence who generate clear and concise description of financial data without any reasoning."
+  template-prompt: "Analyze the attached financial data and provide an executive summary highlighting any anomalies or unusual trends."
+
+one_shot:
+  system_prompt: "You are an Business Intelligence who generate clear and concise description of financial data without any reasoning."
+  template-prompt: "Here's an example of a financial data analysis: [Insert example]\nNow, analyze the attached financial data and provide an executive summary highlighting any anomalies or unusual trends."
+
+few_shot:
+  system_prompt: "You are an Business Intelligence who generate clear and concise description of financial data without any reasoning."
+  template-prompt: "Here are three examples of financial data analyses: [Insert examples 1, 2, and 3]\nAnalyze the attached financial data and provide an executive summary highlighting any anomalies or unusual trends."
+
+react:
+  system_prompt: "You are an Business Intelligence who generate clear and concise description of financial data without any reasoning."
+  template-prompt: "React to the attached financial data by identifying key trends and anomalies.\nAct: Provide a concise executive summary highlighting: - Revenue growth/decline - Expense categories with unusual changes - Profit margin trends\nConfirm: Use relevant financial metrics and terminology."
+
+cot:
+  system_prompt: "You are an Business Intelligence who generate clear and concise description of financial data without any reasoning."
+  template-prompt: "Analyze the following dataframes:\nsale:\n{sale_anomalies},\ndemand_anomalies:\n{demand_anomalies},\nsupply_anomalies:\n{supply_anomalies}.\nProvide insights into sales, demand, supply, and potential outlook based on the anomalies identified in these dataframes."

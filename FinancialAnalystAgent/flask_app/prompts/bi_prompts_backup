@@ -17,3 +17,7 @@ react:
 cot:
   system_prompt: "You are an Business Intelligence who generate clear and concise description of financial data without any reasoning."
   template-prompt: "Analyze the following dataframes:\nsale:\n{sale_anomalies},\ndemand_anomalies:\n{demand_anomalies},\nsupply_anomalies:\n{supply_anomalies}.\nProvide insights into sales, demand, supply, and potential outlook based on the anomalies identified in these dataframes."
+  
+  
+  
+  

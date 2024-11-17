@@ -1,18 +1,65 @@
-zero_shot:
-  system_prompt: "You are an Business Intelligence Analyst who generate clear and concise summary of financial data."
-  template-prompt: "Analyze the financial data including anomalies in sales, demand, and supply. Provide a summary describing the anomalies and specify whether they are caused by demand or supply issues."
+single_agent_zero_shot:
+  system_prompt: "You are a Business Intelligence Analyst specialized in financial data analysis."
+  template_prompt: |
+    Given the following data on anomalies:
+    * sale_anomalies: {sale_anomalies}
+    * demand_anomalies: {demand_anomalies}
+    * supply_anomalies: {supply_anomalies}
+    * outlook_anomalies: {outlook_anomalies}
+    Write an executive summary that describes these anomalies and indicates if they are due to demand or supply issues.
 
-one_shot:
-  system_prompt: "You are an Business Intelligence Analyst who generate clear and concise summary of financial data."
-  template-prompt: "Here's an example of a financial data analysis:\n[We are currently tracking to plan for Q1FY25. Budget utilization improved to 97% (vs 96% from prior week) in-line with trailing 4 wk avg excluding outliers. SC Advertiser budget growth accelerated slightly to +4.3% y/y ( +1.1 pts vs prior week) driven mostly by month end dynamics. Sales is continuing to investigate EMEA ESG budget softness (mainly in UK, France & Israel) although we did see slight improvement in EMEA ESG SC budgets this past week (-2% y/y, +2pts vs prior week).]\nNow, analyze the provided financial data and provide an executive summary highlighting any anomalies or unusual trends."
+single_agent_one_shot:
+  system_prompt: "You are a Business Intelligence Analyst specialized in financial data analysis."
+  template_prompt: |
+    Given the following data on anomalies:
+    * NetBooking: {sale_anomalies}
+    * demand_anomalies: {demand_anomalies}
+    * supply_anomalies: {supply_anomalies}
+    * outlook_anomalies: {outlook_anomalies}
+    Write an executive summary that describes these anomalies and indicates if they are due to demand or supply issues.
+    Here's an example of a financial data analysis
+    [We are currently tracking to plan for Q1FY25. Budget utilization improved to 97% (vs 96% from prior week) in-line with trailing 4 wk avg excluding outliers. SC Advertiser budget growth accelerated slightly to +4.3% y/y ( +1.1 pts vs prior week) driven mostly by month end dynamics. Sales is continuing to investigate EMEA ESG budget softness (mainly in UK, France & Israel) although we did see slight improvement in EMEA ESG SC budgets this past week (-2% y/y, +2pts vs prior week).]
 
-few_shot:
-  system_prompt: "You are an Business Intelligence Analyst who generate clear and concise summary of financial data."
-  template-prompt: "Here are two examples of financial data analyses:|
-  [Example response 1: We are currently tracking to plan for Q1FY25. Budget utilization improved to 97% (vs 96% from prior week) in-line with trailing 4 wk avg excluding outliers. SC Advertiser budget growth accelerated slightly to +4.3% y/y ( +1.1 pts vs prior week) driven mostly by month end dynamics. Sales is continuing to investigate EMEA ESG budget softness (mainly in UK, France & Israel) although we did see slight improvement in EMEA ESG SC budgets this past week (-2% y/y, +2pts vs prior week).]|
-  [Example response 2: SC Raw Budgets (C$) landed at +3.9% y/y (-4.3pp vs. 6/30 wk). Across segments, we only saw strength in OSO2 (+4pp vs. 6/30 wk) in spite of harder PY comp and softness in all other remaining segments. Across geos, saw mixed y/y performance with softness in both NAMER (-7pp vs. 6/30 wk) and EMEA (-5pp vs. 6/30 wk) coming off of harder PY comp and minimal strength in APAC (+3pp vs. 6/30 wk) despite significantly easier PY comp.]|
-  \nNow, analyze the provided financial data and provide an executive summary highlighting any anomalies or unusual trends."
+single_agent_few_shot:
+  system_prompt: "You are a Business Intelligence Analyst specialized in financial data analysis."
+  template_prompt: |
+    Given the following data on anomalies:
+    * sale_anomalies: {sale_anomalies}
+    * demand_anomalies: {demand_anomalies}
+    * supply_anomalies: {supply_anomalies}
+    * outlook_anomalies: {outlook_anomalies}
+    Write an executive summary that describes these anomalies and indicates if they are due to demand or supply issues.
+    Here's an example of a financial data analysis
+    [Example response 1- We are currently tracking to plan for Q1FY25. Budget utilization improved to 97% (vs 96% from prior week) in-line with trailing 4 wk avg excluding outliers. SC Advertiser budget growth accelerated slightly to +4.3% y/y ( +1.1 pts vs prior week) driven mostly by month end dynamics. Sales is continuing to investigate EMEA ESG budget softness (mainly in UK, France & Israel) although we did see slight improvement in EMEA ESG SC budgets this past week (-2% y/y, +2pts vs prior week).]|
+    [Example response 2- SC Raw Budgets (C$) landed at +3.9% y/y (-4.3pp vs. 6/30 wk). Across segments, we only saw strength in OSO2 (+4pp vs. 6/30 wk) in spite of harder PY comp and softness in all other remaining segments. Across geos, saw mixed y/y performance with softness in both NAMER (-7pp vs. 6/30 wk) and EMEA (-5pp vs. 6/30 wk) coming off of harder PY comp and minimal strength in APAC (+3pp vs. 6/30 wk) despite significantly easier PY comp.]|
   
-cot:
-  system_prompt: "You are an Business Intelligence who generate clear and concise description of financial data without any reasoning."
-  template-prompt: "Analyze the following data:\nsale:\n{sale_anomalies},\ndemand_anomalies:\n{demand_anomalies},\nsupply_anomalies:\n{supply_anomalies}.\nProvide insights into sales, demand, supply, and potential outlook based on only the provided data and identified anomalies."
+single_agent_cot:
+  system_prompt: "You are a Financial Analyst specialized in analysing the financial data."
+  template_prompt: |
+    Review the following data on PoP and YoY anomalies for various products, segments and regions:
+    * NetBooking_anomalies: {sale_anomalies}
+    * demand_anomalies: {demand_anomalies}
+    * supply_anomalies: {supply_anomalies}
+    * outlook_anomalies: {outlook_anomalies}
+    
+    1- Analyze the provided NetBooking anomalies data. Focus on identifying notable fluctuations, specifically in PoP and YoY metrics for L7D. Avoid reasoning or interpretation—simply describe the data.
+    2- Review the demand anomalies and supply anomalies data. Highlight any notable changes, specifically in PoP and YoY metrics for L7D. Emphasize shifts in demand or supply without offering explanations.
+    3- Evaluate the anomalies in Net Bookings (Sales) and determine whether they are primarily driven by changes in demand or supply anomalies. Identify any strong correlations between sales performance and either demand or supply trends.
+    4- Report whether we are on track with outlook or not.
+    4- Compile the findings from steps 1 through 4 into a concise executive summary. Focus on presenting key quantitative insights, outlining the most critical anomalies and trends observed, and offering a clear assessment of the overall situation.
+
+    Key Notes:
+    L7D should be given higher priority in the analysis for its recent relevance.
+    Avoid the use of bullet points—opt for clear, direct, and formal financial reporting.
+    Ensure the language is quantitative and financial in tone—focus on data points, trends, and anomalies without speculative reasoning or subjective commentary.
+
+multi_agent_cot:
+  system_prompt: "You are a Business Intelligence Analyst specialized in describing financial data without any root cause analysis."
+  template_prompt: |
+    Given the following data on anomalies:
+    * sale_anomalies: {sale_anomalies}
+    * demand_anomalies: {demand_anomalies}
+    * supply_anomalies: {supply_anomalies}
+    * outlook_anomalies: {outlook_anomalies}
+    First, identify and categorize each anomaly.
+    Then, compile your findings into an executive summary, providing insights into sales, demand, supply, and potential outlook based on only the provided data.

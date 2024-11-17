@@ -23,7 +23,7 @@
             background: white;
         }
         .input-section {
-            flex: 0 0 25%; /* 25% width */
+            flex: 0 0 20%; /* 25% width */
             padding: 20px;
             border-right: 1px solid #ccc;
             background-color: #e9f5ff;
@@ -34,51 +34,8 @@
             display: flex;
             flex-direction: column;
             background-color: #ffffff;
-            max-height: 800px; /* max height for scrolling */
+            max-height: 800; /* max height for scrolling */
             overflow-y: auto; /* vertical scrolling */
-        }
-
-        .agent-results-container h1 {
-        font-size: 2rem;
-        color: #007bff;
-        margin-bottom: 20px;
-        font-weight: 600;
-        border-bottom: 2px solid #007bff;
-        padding-bottom: 10px;
-        }
-        .agent-results-container h2 {
-            font-size: 1.5rem;
-            color: #333;
-            margin-top: 30px;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-        .agent-results-container p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #555;
-            margin-bottom: 20px;
-        }
-        .agent-results-container pre {
-            background-color: #f7f7f7;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 15px;
-            font-size: 1rem;
-            white-space: pre-wrap;
-            overflow-wrap: break-word;
-            margin-top: 20px;
-        }
-        .back-to-top {
-            display: inline-block;
-            margin-top: 30px;
-            color: #007bff;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-        .back-to-top:hover {
-            text-decoration: underline;
         }
 
         /* Table Styling */
@@ -103,7 +60,7 @@
             font-weight: bold;
         }
         input, select {
-            width: 100%;
+            width: 90%;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
@@ -127,7 +84,7 @@
         }
         pre {
             background-color: #f9f9f9;
-            padding: 10px;
+            padding: 2px;
             border: 1px solid #ccc;
             white-space: pre-wrap; 
             flex: 1;
@@ -142,10 +99,10 @@
             border-spacing: 0;
         }
         th, td {
-        padding: 8px 10px; 
-        text-align: left;
-        font-size: 14px;
-        border: 1px solid #ccc;
+            padding: 8px 10px; 
+            text-align: left;
+            font-size: 14px;
+            border: 1px solid #ccc;
         }
         th {
             background-color: #007bff;
@@ -156,8 +113,40 @@
             background-color: #f9f9f9;
         }
         td, th {
-        font-size: 13px; 
+            font-size: 13px; 
         }
+
+        /* Chat box container styling */
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        .message.user {
+            background-color: #e0f7fa;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .message-agent pre {
+            background-color: #f7f7f7;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Mobile responsive */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -197,6 +186,7 @@
         </div>
 
         <div class="result-section">
+            <!-- Table Container -->
             <div class="table-container">
                 {% if table_data %}
                     <table>
@@ -230,17 +220,83 @@
                     <p>No data available to display.</p>
                 {% endif %}
             </div>
+            
+            <!-- Results Section -->
+            <div class="result-container">
+                <div class="message-agent">
+                    {% if results %}
+                        <p> <b>Overall Analysis Results: </b></p>
+                        <pre>{{ results }}</pre>
+                    {% else %}
+                        <h1>Results will be displayed here</h1>
+                    {% endif %}
+                </div>
+            </div>
 
-            <div class="agent-results-container">
-                {% if results %}
-                    <h1>Analysis Results</h1>
-                    <pre>{{ results }}</pre>
-                    <!-- <a href="#top" class="back-to-top">Back to top</a> -->
-                {% else %}
-                    <h1>Results will be displayed here</h1>
-                {% endif %}
+            <!-- Chat Box Container -->
+            <div class="chat-box" id="chat-box">
+                <!-- Placeholder for further messages -->
+            </div>
+
+            <!-- Follow-up message input -->
+            <div class="follow-up-section">
+                <input type="text" id="user-message" placeholder="Type your follow-up question..." maxlength="500" />
+                <button id="send-btn" onclick="sendMessage()" disabled>Send</button>
+                <p id="message-count">Messages left: 3</p>
             </div>
         </div>
     </div>
+
+    <script>
+        let messageCount = 3;  // Track the number of remaining follow-up messages
+        const chatBox = document.getElementById('chat-box');
+        const messageInput = document.getElementById('user-message');
+        const sendBtn = document.getElementById('send-btn');
+        const messageCountText = document.getElementById('message-count');
+
+        // Enable the send button when there is text in the input field
+        messageInput.addEventListener('input', () => {
+            sendBtn.disabled = !messageInput.value.trim();
+        });
+
+        function sendMessage() {
+            const userMessage = messageInput.value.trim();
+            if (userMessage === "" || messageCount <= 0) return;
+
+            // Display user's message in chat box
+            displayMessage(userMessage, 'user');
+
+            // Disable the send button and input field temporarily
+            sendBtn.disabled = true;
+            messageInput.disabled = true;
+
+            // Simulate agent response (you can replace this with actual API call)
+            const agentResponse = `Response to: ${userMessage}`;
+            displayMessage(agentResponse, 'agent');
+
+            // Update message count
+            messageCount--;
+            messageCountText.textContent = 'Messages left: ' + messageCount;
+
+            // If conversation is closed, disable further input
+            if (messageCount <= 0) {
+                messageInput.disabled = true;
+                sendBtn.disabled = true;
+            } else {
+                // Enable the send button and input field for the next message
+                sendBtn.disabled = false;
+                messageInput.disabled = false;
+                messageInput.value = ''; // Clear input
+            }
+        }
+
+        function displayMessage(message, role) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', role);
+            messageElement.innerHTML = `<p>${message}</p>`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+        }
+    </script>
 </body>
 </html>

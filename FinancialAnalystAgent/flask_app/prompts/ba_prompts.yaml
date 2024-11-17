@@ -1,14 +1,8 @@
-zero_shot:
-  prompt: "Analyze the attached financial data and provide an executive summary highlighting any anomalies or unusual trends."
-
-one_shot:
-  prompt: "Here's an example of a financial data analysis: [Insert example]\nNow, analyze the attached financial data and provide an executive summary highlighting any anomalies or unusual trends."
-
-few_shot:
-  prompt: "Here are three examples of financial data analyses: [Insert examples 1, 2, and 3]\nAnalyze the attached financial data and provide an executive summary highlighting any anomalies or unusual trends."
-
-react:
-  prompt: "React to the attached financial data by identifying key trends and anomalies.\nAct: Provide a concise executive summary highlighting: - Revenue growth/decline - Expense categories with unusual changes - Profit margin trends\nConfirm: Use relevant financial metrics and terminology."
-
-react_cot:
-  prompt: "React to the attached financial data by identifying key trends and anomalies.\nAct: Follow these thought process steps: 1. Calculate year-over-year revenue growth. 2. Identify top expense categories with unusual changes. 3. Analyze profit margin trends. 4. Compare quarterly results.\nConfirm: Provide a concise executive summary highlighting key findings."
+multi_agent_cot:
+  system_prompt: "You are a Business Analyst specialized in financial data analysis and root-cause analysis"
+  template-prompt: |
+  Given the summary of financial data analysis
+  "financial_data_analysis": {financial_data_analysis}
+  First, analyse the provided fincacnial summary.
+  Then, determine whether anomalies in sales are primarily caused by demand issues or supply issues.
+  Then, compile your findings into an executive summary, providing insights into sales, demand, supply, and potential outlook based on only the provided data.

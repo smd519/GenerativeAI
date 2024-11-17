@@ -28,12 +28,10 @@ class BaseAgent:
             self.prompts = yaml.safe_load(f)
 
     def generate_message(self, input_data):
-        template_content = self.prompts[self.prompt_type]["template-prompt"]
+        template_content = self.prompts[self.prompt_type]["template_prompt"]
         system_prompt = self.prompts[self.prompt_type]["system_prompt"]
-        
         # Convert DataFrames to markdown tables
         #formatted_data = {k: v.to_markdown() for k, v in input_data.items()}
-
         content = template_content.format(**input_data )
         template_message = [
             {'role':'system','content':system_prompt},
@@ -41,7 +39,8 @@ class BaseAgent:
             ]
         return template_message
     
-    def generate_response(self, messages, model = "gpt-3.5-turbo"):
+    def generate_response(self, messages, model = "gpt-4o-mini"):  
+        # OpenAI documents recommend choosing gpt-4o-mini where you would have previously used gpt-3.5-turbo
         response = self.openai_client.chat.completions.create(
             model = model,
             messages = messages

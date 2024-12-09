@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Caption Generator</title>
+    <!-- Import Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+    <style>
+        /* Global styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #f0f4f8, #e3e9ef);
+            padding: 20px;
+            color: #333;
+        }
+
+        /* Top Header (5% of the page) */
+        .header {
+            height: 5vh;
+            text-align: center;
+            padding-top: 1rem;
+            color: #0f0f0f;
+            font-size: 1.0rem;
+            font-weight: 600;
+        }
+
+        /* Container for the layout */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        /* User input section */
+        .input-section {
+            flex: 0 0 30%; /* 30% width */
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Chat section */
+        .chat-section {
+            flex: 1; /* Take up remaining space */
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Chat message bubbles */
+        .chat-message {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 10px;
+            max-width: 70%;
+            min-width: 20%;
+            font-size: 1rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* User message styles (right-aligned) */
+        .user-message {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+            float: right;
+        }
+
+        /* Bot message styles (left-aligned) */
+        .bot-message {
+            background-color: #f8d7da;
+            align-self: flex-start;
+            float: left;
+        }
+
+        /* Input form section */
+        .input-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-form input, .input-form select {
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-form button {
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .input-form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Chat input section */
+        .chat-input-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            gap: 10px;
+        }
+
+        /* For responsive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .input-section, .chat-section {
+                flex: 1;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Header -->
+    <div class="header">
+        <p>We support Instagram influencers by auto-generating the best Instagram captions for a provided image.</p> 
+    </div>
+
+    <div class="container mt-5">
+        <!-- User Input Section -->
+        <div class="input-section">
+            <h2 class="mb-4">User Inputs</h2>
+
+            <form method="POST" class="input-form">
+                <div class="mb-3">
+                    <label for="image_path" class="form-label">Enter Image Path</label>
+                    <input type="text" class="form-control" id="image_path" name="image_path" required>
+                </div>
+                <div class="mb-3">
+                    <label for="option" class="form-label">Select Option</label>
+                    <select class="form-select" id="option" name="option" required>
+                        <option value="Describe the Image">Describe the Image</option>
+                        <option value="Poem about the image">Poem about the image</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="api_key" class="form-label">Enter OpenAI API Key</label>
+                    <input type="text" class="form-control" id="api_key" name="api_key" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <!-- Chat Section (Results) -->
+        <div class="chat-section">
+            <!-- Initial chat message (first response from the server) -->
+            {% if result %}
+            <div class="chat-message bot-message">
+                <p>{{ result }}</p>
+            </div>
+            {% endif %}
+            
+            <!-- Placeholder for user and bot messages -->
+            <div id="chat-box"></div>
+
+            <!-- Chat Input Section -->
+            <div class="chat-input-section">
+                <form id="chat-form" class="w-100">
+                    <input type="text" class="form-control" id="user-message" placeholder="Ask something..." required>
+                    <button type="submit" class="btn btn-secondary ms-2">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optionally add Bootstrap JS for interactivity -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Handle the form submission to send chat messages
+        document.getElementById('chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const userMessage = document.getElementById('user-message').value;
+            if (userMessage.trim() === '') return;
+
+            // Display the user's message (on the right)
+            const chatBox = document.getElementById('chat-box');
+            const userChat = document.createElement('div');
+            userChat.classList.add('chat-message', 'user-message');
+            userChat.innerHTML = `<p>${userMessage}</p>`;
+            chatBox.appendChild(userChat);
+
+            // Simulate bot's response (you can replace this with a dynamic response in a real app)
+            const botResponse = document.createElement('div');
+            botResponse.classList.add('chat-message', 'bot-message');
+            botResponse.innerHTML = `<p>Fake bot response to your question about the image.</p>`;
+            chatBox.appendChild(botResponse);
+
+            // Scroll to the bottom of the chat box
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Clear the input field
+            document.getElementById('user-message').value = '';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+Travel Blogger:
+  system_prompt: "You are an expert Instagram caption generator"
+  template_prompt: |
+    generate an Instagram caption based on the following details:
+    * caption_theme: {caption_theme}
+    * image_description: {image_description}
+    Make the caption engaging, creative, and relevant to the theme and the image description. Ensure the tone matches the theme (e.g., fun for travel, inspiring for nature, etc.). Keep the caption concise, yet impactful, as if it were for an Instagram post.
+
+Fashion Blogger:
+  system_prompt: "You are an expert Instagram caption generator"
+  template_prompt: |
+    generate an Instagram caption based on the following details:
+    * caption_theme: {caption_theme}
+    * image_description: {image_description}
+    Make the caption engaging, creative, and relevant to the theme and the image description. Ensure the tone matches the theme (e.g., fun for travel, inspiring for nature, etc.). Keep the caption concise, yet impactful, as if it were for an Instagram post.

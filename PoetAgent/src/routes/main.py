@@ -2,6 +2,7 @@ import os
 import shutil
 from flask import Blueprint, render_template, request
 from models.generator import InstagramCaptionGenerator
+from models.BaseAgent import BaseAgent
 
 # Define the blueprint
 main_blueprint = Blueprint('main', __name__)
@@ -19,7 +20,7 @@ def home():
         image_path = request.form['image_path']  # Get the image path from the form input
         option = request.form['option']
         theme = request.form['theme']
-        personality = request.form['personality']
+        persona = request.form['persona']
 
         # Check if the image_path exists
         if os.path.exists(image_path):
@@ -35,14 +36,25 @@ def home():
             result_image = os.path.join("static\images", image_filename)
 
             # Instantiate the InstagramCaptionGenerator class
-            generator = InstagramCaptionGenerator(api_key)
+            describer = InstagramCaptionGenerator(api_key)
+            generator = BaseAgent(api_key, theme, persona)
 
-            # Generate caption or poem based on user option
+            # Generate Text description of the image
+            img_description = describer.generate_caption(image_path)
+
+            # prepare data to be emded in prompts
+            input_data = {
+                "caption_theme": theme,
+                "image_description": img_description
+            }
+
+            # Tailor the output based on user preference
             if option == 'Describe the Image':
-                result = generator.generate_caption(image_path)
+                result = img_description
             elif option == 'Poem about the image':
-                caption = generator.generate_caption(image_path)
-                result = generator.generate_poem(caption)
+                result = generator.generate_message(input_data)
+            elif option == 'Caption for Instagram':
+                result = generator.generate_message(input_data) #process
     
     return render_template('index.html', result=result, result_image=result_image)
 

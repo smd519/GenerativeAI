@@ -47,13 +47,30 @@
             text-align: center;
         }
 
-        /* Chat section */
-        .chat-section {
-            flex: 1; /* Take up remaining space */
+        /* Generated Caption and Chat Section */
+        .result-section {
+            flex: 1; /* Take up the remaining 70% width */
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Generated Caption Section */
+        .generated-caption {
             background-color: #ffffff;
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex: 0 0 50%; /* 50% of the result section */
+        }
+
+        /* Chat Section */
+        .chat-section {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex: 0 0 50%; /* 50% of the result section */
             height: 500px;
             display: flex;
             flex-direction: column;
@@ -127,12 +144,21 @@
             gap: 10px;
         }
 
+        .generated-caption .image-container img {
+            width: 100%; /* Ensures the image takes full width of container */
+            max-width: 500px; /* Limit the max width */
+            max-height: 300px; /* Limit the max height */
+            object-fit: contain; /* Ensures aspect ratio is maintained */
+            margin: 0 auto; /* Center the image */
+            display: block;
+        }
+
         /* For responsive design */
-        @media (max-width: 768px) {
+        @media (max-width:400px) {
             .container {
                 flex-direction: column;
             }
-            .input-section, .chat-section {
+            .input-section, .result-section {
                 flex: 1;
                 margin-bottom: 1rem;
             }
@@ -166,28 +192,53 @@
                     <label for="api_key" class="form-label">Enter OpenAI API Key</label>
                     <input type="text" class="form-control" id="api_key" name="api_key" required>
                 </div>
+                <div class="mb-3">
+                    <label for="theme" class="form-label">Theme</label>
+                    <select class="form-select" id="theme" name="theme" required>
+                        <option value="Formal">Formal</option>
+                        <option value="Casual">Casual</option>
+                        <option value="Fun">Fun</option>
+                        <option value="Academic">Academic</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="personality" class="form-label">Personality</label>
+                    <select class="form-select" id="personality" name="personality" required>
+                        <option value="Fashion Blogger">Fashion Blogger</option>
+                        <option value="Nature Blogger">Nature Blogger</option>
+                        <option value="Travel Blogger">Travel Blogger</option>
+                        <option value="Science and Technology Blogger">Science and Technology Blogger</option>
+                        <option value="History and Architecture Blogger">History and Architecture Blogger</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
 
-        <!-- Chat Section (Results) -->
-        <div class="chat-section">
-            <!-- Initial chat message (first response from the server) -->
-            {% if result %}
-            <div class="chat-message bot-message">
+        <!-- Result Section -->
+        <div class="result-section">
+            <!-- Generated Caption Section -->
+            <div class="generated-caption">
+                {% if result_image %}
+                <div class="image-container">
+                    <img src="{{ result_image }}" alt="Generated Image" class="img-fluid">
+                </div>
                 <p>{{ result }}</p>
+                {% endif %}
             </div>
-            {% endif %}
-            
-            <!-- Placeholder for user and bot messages -->
-            <div id="chat-box"></div>
 
-            <!-- Chat Input Section -->
-            <div class="chat-input-section">
-                <form id="chat-form" class="w-100">
-                    <input type="text" class="form-control" id="user-message" placeholder="Ask something..." required>
-                    <button type="submit" class="btn btn-secondary ms-2">Send</button>
-                </form>
+            <!-- Chat Section -->
+            <div class="chat-section">
+                <!-- Placeholder for user and bot messages -->
+                <div id="chat-box"></div>
+
+                <!-- Chat Input Section -->
+                <div class="chat-input-section">
+                    <form id="chat-form" class="w-100">
+                        <input type="text" class="form-control" id="user-message" placeholder="Ask something..." required>
+                        <button type="submit" class="btn btn-secondary ms-2">Send</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

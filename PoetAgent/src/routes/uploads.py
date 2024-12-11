@@ -1,29 +1,51 @@
-from flask import Flask, Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 import os
+from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = 'static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static/images')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # Define the blueprint
-upload_blueprint = Blueprint('upload', __name__)
+upload_blueprint = Blueprint('uploads', __name__)
+
+# Function to clean up the images folder
+
+def clean_images_folder():
+    for filename in os.listdir(UPLOAD_FOLDER):
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)  # Delete the file
 
 # Function to check allowed extensions
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@upload_blueprint.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        # Check if the post request has the file part
-        file = request.files.get('file')
-        if file and allowed_file(file.filename):
-            # Secure the filename and save the file
-            filename = file.filename
+@upload_blueprint.route('/upload', methods=['POST'])
+def upload_image():
+    file = request.files.get('image_file')
+    print("******************************")
+    clean_images_folder()
+    if file and allowed_file(file.filename):
+        # Secure the filename and save the file
+        filename , file_extension = os.path.splitext(secure_filename(file.filename))
+        filename = 'tmp' + file_extension
+        #filename = secure_filename(file.filename)
+        try:
             file.save(os.path.join(UPLOAD_FOLDER, filename))
-            return redirect(url_for('uploaded_file', filename=filename))
-    return render_template('upload.html')
+        except:
+            print("Failed to upload the image.")
+        else:
+            print("Image uploaded successfully.")
+
+        #return redirect(url_for('uploads.uploaded_file', filename=filename))
+        return jsonify({'image_path': f'static/images/{filename}'})
+
+    #return 'Invalid file type or no file uploaded', 400
+    return jsonify({'error': 'Invalid file type'})
 
 @upload_blueprint.route('/uploads/<filename>')
 def uploaded_file(filename):
+    """Display the uploaded image."""
     return f'File uploaded successfully! <br> <img src="/static/images/{filename}" alt="{filename}">'

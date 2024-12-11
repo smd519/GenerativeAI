@@ -13,7 +13,7 @@ STATIC_IMAGES_FOLDER = 'W:\OMSA\ws\GenerativeAI\PoetAgent\src\static\images'
 @main_blueprint.route('/', methods=['GET', 'POST'])
 def home():
     result = ""
-    result_image = ""
+    image_path = ""
     
     if request.method == 'POST':
         api_key = request.form["api_key"]
@@ -22,44 +22,36 @@ def home():
         theme = request.form['theme']
         persona = request.form['persona']
 
-        # Check if the image_path exists
-        if os.path.exists(image_path):
-            # Generate a new filename (use the basename of the image_path)
-            image_filename = os.path.basename(image_path)
-            # Create a new path in the static/images folder
-            destination_path = os.path.join(STATIC_IMAGES_FOLDER, image_filename)
 
-            # Copy the image to the static/images folder
-            shutil.copy(image_path, STATIC_IMAGES_FOLDER)
-            result_image = destination_path  # Store relative path for the image
+        # Instantiate the InstagramCaptionGenerator class
+        describer = InstagramCaptionGenerator(api_key)
+        generator = BaseAgent(api_key, theme, persona)
 
-            result_image = os.path.join("static\images", image_filename)
+        # Generate Text description of the image
+        img_description = describer.generate_caption(image_path)
 
-            # Instantiate the InstagramCaptionGenerator class
-            describer = InstagramCaptionGenerator(api_key)
-            generator = BaseAgent(api_key, theme, persona)
+        # prepare data to be emded in prompts
+        input_data = {
+            "caption_theme": theme,
+            "image_description": img_description
+        }
 
-            # Generate Text description of the image
-            img_description = describer.generate_caption(image_path)
+        # Tailor the output based on user preference
+        if option == 'Describe the Image':
+            result = img_description
+        elif option == 'Poem about the image':
+            result = generator.process(input_data)
+        elif option == 'Caption for Instagram':
+            result = generator.process(input_data) #process
 
-            # prepare data to be emded in prompts
-            input_data = {
-                "caption_theme": theme,
-                "image_description": img_description
-            }
+        print(result)
 
-            # Tailor the output based on user preference
-            if option == 'Describe the Image':
-                result = img_description
-            elif option == 'Poem about the image':
-                result = generator.generate_message(input_data)
-            elif option == 'Caption for Instagram':
-                result = generator.generate_message(input_data) #process
     
-    return render_template('index.html', result=result, result_image=result_image)
+    return render_template('index.html', result=result, image_path = image_path)
 
 if __name__ == '__main__':
-    image_path = 'W:\OMSA\ws\GenerativeAI\PoetAgent\src\data\test.jpg'
+    image_path = 'static/images/tmp.jpg'
+    #'W:\OMSA\ws\GenerativeAI\PoetAgent\src\data\test.jpg'
     image_filename = os.path.basename(image_path)
     destination_path = os.path.join(STATIC_IMAGES_FOLDER, image_filename)
     shutil.copy(image_path, destination_path)

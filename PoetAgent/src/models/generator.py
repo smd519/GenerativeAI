@@ -18,6 +18,7 @@ class InstagramCaptionGenerator:
 
     def generate_caption(self, image_path):
         """ Image to to Text """
+        print(image_path)
         try:
             # Load the image
             image = Image.open(image_path)

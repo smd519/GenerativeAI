@@ -26,7 +26,7 @@ class BaseAgent:
         self.persona = persona
         self.openai_client = OpenAI(api_key = self.api_key)
 
-        file_path = os.path.join(os.getcwd(), "src", "models" , "prompts", prompt_file)
+        file_path = os.path.join(os.getcwd(), "models" , "prompts", prompt_file)
         with open(file_path, "r") as f:
             self.prompts = yaml.safe_load(f)
 

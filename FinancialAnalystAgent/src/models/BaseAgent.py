@@ -23,7 +23,7 @@ class BaseAgent:
         self.prompt_type = prompt_type
         self.openai_client = OpenAI(api_key = self.api_key)
 
-        file_path = os.path.join(os.getcwd(), "prompts", prompt_file)
+        file_path = os.path.join(os.getcwd(), "models", "prompts", prompt_file)
         with open(file_path, "r") as f:
             self.prompts = yaml.safe_load(f)
 
@@ -52,9 +52,9 @@ class BaseAgent:
         return self.generate_response(messages = prompt, model = "gpt-3.5-turbo")
     
 if __name__ == "__main__":
-    test_agent = BaseAgent(api_key= "jhggdhdhsd", prompt_type= "cot", prompt_file= 'bi_prompts.yaml')
+    test_agent = BaseAgent(api_key= "jhggdhdhsd", prompt_type= "single_agent_cot", prompt_file= 'bi_prompts.yaml')
     print("************\n")
-    print(test_agent.prompts[test_agent.prompt_type]["template-prompt"])
+    print(test_agent.prompts[test_agent.prompt_type]["template_prompt"])
     print("************\n")
     d = {'col1': [1, 2, "Here I am"], 'col2': [3, 4, "Because I am"]}
     df1 = pd.DataFrame(data=d)
@@ -63,7 +63,8 @@ if __name__ == "__main__":
     input_data = {
             "sale_anomalies": df1,
             "demand_anomalies": df2,
-            "supply_anomalies": df3
+            "supply_anomalies": df3,
+            "outlook_anomalies": df3
     }
     message = test_agent.generate_message(input_data)
     print(message)

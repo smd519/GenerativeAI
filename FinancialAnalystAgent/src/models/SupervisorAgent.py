@@ -3,7 +3,7 @@ Created on Sat Oct  5 10:15:38 2024
 
 @author: Sajjad Mosharraf
 """
-from BaseAgent import BaseAgent
+from models.BaseAgent import BaseAgent
 
 class SupervisorAgent(BaseAgent):
     """"

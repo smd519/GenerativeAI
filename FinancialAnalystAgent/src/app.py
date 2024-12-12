@@ -1,9 +1,9 @@
 from flask import Flask, render_template,  request, jsonify, session
 import os
-from DataAnalysis import DataAnalysis
-from BIAgent import BIAgent
-from BAAgent import BAAgent
-from SupervisorAgent import SupervisorAgent
+from models.DataAnalysis import DataAnalysis
+from models.BIAgent import BIAgent
+from models.BAAgent import BAAgent
+from models.SupervisorAgent import SupervisorAgent
 from openai import OpenAI
 
 app = Flask(__name__)

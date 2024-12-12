@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Data Analysis Agent</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="input-section">
+            <h1>Data Analysis Input</h1>
+            <form method="POST">
+                <label for="api_key">API Key:</label>
+                <input type="text" id="api_key" name="api_key" required>
+                
+                <label for="file_path">File Path:</label>
+                <input type="text" id="file_path" name="file_path" required>
+                
+                <label for="analysis_type">Analysis Type:</label>
+                <input type="text" id="analysis_type" name="analysis_type" required>
+                
+                <label for="prompt_type">Prompt Type:</label>
+                <select id="prompt_type" name="prompt_type" required>
+                    <option value="single_agent_zero_shot">Single Agent- Zero Shot</option>
+                    <option value="single_agent_one_shot">Single Agent- One Shot</option>
+                    <option value="single_agent_few_shot">Single Agent- Few Shot</option>
+                    <option value="single_agent_cot">Single Agent- Chain of Thought</option>
+                    <option value="multi_agent_cot">Multi Agent- Chain of Thought</option>
+                </select>
+                
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+
+        <div class="result-section">
+            <div class="table-container">
+                {% if table_data %}
+                    <table>
+                        <thead>
+                            <caption> <b>Last 7 Days Highlights</b></caption>
+                            <tr>
+                                <th>Product</th>
+                                <th>Segment</th>
+                                <th>Region</th>
+                                <th>Metric</th>
+                                <th>Period Label</th>
+                                <th>PoP(%)</th>
+                                <th>YoY(%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in table_data %}
+                                <tr>
+                                    <td>{{ row.product }}</td>
+                                    <td>{{ row.segment }}</td>
+                                    <td>{{ row.region }}</td>
+                                    <td>{{ row.metric }}</td>
+                                    <td>{{ row.period_label }}</td>
+                                    <td>{{ row.Period_over_Period }}</td>
+                                    <td>{{ row.Year_over_Year }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No data available to display.</p>
+                {% endif %}
+            </div>
+
+            <div class="agent-results-container">
+                {% if results %}
+                    <h1>Analysis Results</h1>
+                    <pre>{{ results }}</pre>
+                    <!-- <a href="#top" class="back-to-top">Back to top</a> -->
+                {% else %}
+                    <h1>Results will be displayed here</h1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

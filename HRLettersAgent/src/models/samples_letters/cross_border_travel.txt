@@ -1,0 +1,9 @@
+Purpose: Cross-border Travel Request
+Date: xxxx-xx-xx
+
+Dear Sir/Madam,
+
+We confirm that {name} (Employee ID: {employee_id}) is required to travel internationally for work purposes.
+
+Sincerely,
+Your Company

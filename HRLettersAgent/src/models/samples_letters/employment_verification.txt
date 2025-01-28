@@ -1,0 +1,9 @@
+Purpose: Employment Verification
+Date: xxxx-xx-xx
+
+Dear Sir/Madam,
+
+This is to verify that {name} (Employee ID: {employee_id}) is currently employed as {job_title} at our company.
+
+Sincerely,
+Your Company

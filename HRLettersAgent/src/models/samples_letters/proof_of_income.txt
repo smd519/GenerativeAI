@@ -1,0 +1,10 @@
+Purpose: Proof of Income
+Date: xxxx-xx-xx
+
+
+Dear Sir/Madam,
+
+This letter serves as proof of income for {name} (Employee ID: {employee_id}). The income for the year is {income}.
+
+Sincerely,
+Your Company

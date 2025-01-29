@@ -1,0 +1,8 @@
+generate_letter:
+  system_prompt: "You are an HR Assistant requested to review the employee's request and identify the request type."
+  template_prompt: |
+    Review the following user request and list of available_options, 
+    Identify which letter_templates is appropriate for user's request
+    Return only the code corresponding to the letter templates.
+    * request: {reason}
+    * available_options: {letter_templates}

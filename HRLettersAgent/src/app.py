@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request
 from models.employee import Employee
 from models.letter_template import LetterTemplate
+from models.request_interpretation import RequestInterpreter
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    letter_content = None  # Initialize variable for the letter content
+    
     if request.method == 'POST':
         # Get form data from the user
         employee_id = request.form['employee_id']
@@ -20,16 +23,9 @@ def home():
             return "Employee not found. Please check the Employee ID."
 
         # Define the letter_code mapping based on reason
-        letter_code_mapping = {
-            "employment verification": 1,
-            "cross-border travel": 2,
-            "proof of income": 3,
-            "proof of work for immigration": 4
-        }
+        request_interpreter = RequestInterpreter('generate_letter')
+        letter_code = request_interpreter.process(reason)
 
-        # Identify the letter code based on the reason
-        # Replace this with a AI approach
-        letter_code = letter_code_mapping.get(reason.lower())
         if not letter_code:
             return "Invalid reason provided."
 
@@ -37,9 +33,8 @@ def home():
         letter_template = LetterTemplate(letter_code, employee_info)
         letter_content = letter_template.generate_letter()
         
-        return render_template('letter_output.html', letter=letter_content)
+    return render_template('index.html', letter=letter_content)
     
-    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

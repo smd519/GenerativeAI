@@ -9,3 +9,5 @@ This project is a web application designed to help social media influencers and 
 
 ## [HRLettersAgent](https://github.com/smd519/GenerativeAI/tree/main/HRLettersAgent)
 (Work in Progress) This project is a Flask-based web application that generates personalized letter templates for employees based on user input and employee data, using dynamic template filling and database integration.
+
+<img src=HRLettersAgent/screenshots/version_2.png alt="Alt Text" width="400">

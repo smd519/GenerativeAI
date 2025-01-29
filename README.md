@@ -6,3 +6,6 @@ This project is an AI Agent-based Web Application capable of generating dynamic,
 This project is a web application designed to help social media influencers and content creators effortlessly generate captivating captions for their posts.
 
 <img src=SocialMediAgent/screenshots/Output.jpg alt="Alt Text" width="300">
+
+## [HRLettersAgent](https://github.com/smd519/GenerativeAI/tree/main/HRLettersAgent)
+(Work in Progress) This project is a Flask-based web application that generates personalized letter templates for employees based on user input and employee data, using dynamic template filling and database integration.
